@@ -1,23 +1,38 @@
-import logo from './logo.svg';
+import { useEffect, useState } from 'react';
 import './App.css';
 
 function App() {
+  const [data, setData] = useState([])
+
+  const apiCoinLists = 'https://api.coingecko.com/api/v3/coins/list'
+  useEffect(() => {
+    fetch(apiCoinLists).then(response => response.json()).then(json => {
+      setData(json)
+    }).catch(e => {
+      console.log('e', e)
+    })
+
+  }, [])
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <table>
+        <tr>
+          <td>Id</td>
+          <td>Name</td>
+          <td>Symbol</td>
+        </tr>
+        {
+          data.map(item => {
+            return (
+              <tr>
+                <td>{item.id}</td>
+                <td>{item.name}</td>
+                <td>{item.symbol}</td>
+              </tr>
+            )
+          })
+        }
+      </table>
     </div>
   );
 }
